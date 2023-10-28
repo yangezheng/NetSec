@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
 import socket
-
 # Fill in the right target here
-HOST = 'thisisno.valid.hostname'    # TODO
-PORT = 42                           # TODO
+
+HOST = 'netsec.net.in.tum.de'    # TODO
+PORT = 20001                     # TODO
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -21,6 +21,13 @@ def write(sf):
     sf.flush()
 
 # ToDo: implement communication with server here, using the template functions above
+
+read(sf)
+write(sf)
+read(sf)
+write(sf)
+read(sf)
+
 
 sf.close()
 s.close()
