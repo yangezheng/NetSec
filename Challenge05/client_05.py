@@ -2,8 +2,9 @@
 import socket
 from base64 import b64encode, b64decode
 
-HOST = 'thisisno.valid.hostname'
-PORT = 42
+
+HOST = 'netsec.net.in.tum.de'    # TODO
+PORT = 20005                     # TODO
 
 
 def main():
@@ -20,7 +21,7 @@ def main():
     print("From Bob: `{}'".format(banner)) # you should see the newline at the end printed
 
     # "SEND ENCRYPTED DATA"
-    sf.write("SEND ENCRYPTED DATA\n")
+    sf.write("SEND __________DATA\n")
     sf.flush()
 
     data = sf.readline().rstrip('\n')
@@ -33,9 +34,13 @@ def main():
         # IV,ENCRYPTED DATA
         print("Data seems to be encrypted")
         return
+    
+    de_data = b64decode(data)
+    print(de_data)
 
     sf.close()
     s.close()
 
 main()
+
 
